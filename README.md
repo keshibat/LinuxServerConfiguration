@@ -90,13 +90,21 @@ $ sudo vim /etc/ssh/sshd_config
 ```
 PasswordAuthentication no
 ```
+
+Disable root login
+```
+$ sudo vim /etc/ssh/sshd_config
+```
+```
+PermitRootLogin no
+```
+
 Restart Service
 ```bash
 sudo service ssh restart
 ```
 
-##Firewall
-
+###Firewall
 ```bash
 # set default rule to deny all incoming connections
 $ sudo ufw default deny incoming
@@ -124,7 +132,7 @@ $ sudo ufw enable
 $ sudo ufw status verbose
 ```
 
-## Change the SSH port from 22 to 2200
+### Change the SSH port from 22 to 2200
 ```
 Edit the /etc/ssh/sshd_config file to set Port to 2200.
 #Restart the service
@@ -136,6 +144,149 @@ $ sudo ufw deny 22
 #Check status of firewall
 $ sudo ufw status
 ```
+
+### Configure the local timezone to UTC
+```
+$ sudo dpkg-reconfigure tzdata
+```
+
+### Install apache2 and libapache2-mod-wsgi modules
+```
+$ sudo apt-get install apache2
+$ sudo apt-get install libapache2-mod-wsgi
+```
+
+### Install PostgreSQL
+```
+$ sudo apt-get install postgresql postgresql-contrib
+
+#Login as superuser postgres
+$ sudo su - postgres
+
+#Create a new database named "catalog" and create a new user named "dbuser" in postgressql.
+$ createdb catalog;
+$ createuser dbuser;
+
+#Set password for dbuser
+$ alter role dbuser with password 'Secret1.0';
+
+#Give user "dbuser" permission to "catalog" application database
+$ grant all privileges on database catalog to dbuser;
+```
+
+### Install Git
+```
+$ sudo apt-get install git
+$ git config --global user.name "keshibat"
+$ git config --global user.email "kensukeshibata@gmail.com"
+```
+
+### Install mod_wsgi
+```
+# install mod_wsgi
+$ sudo apt-get install libapache2-mod-wsgi
+$ sudo apt-get install libapache2-mod-wsgi-py3
+
+#Configure Apache to handle requests using the WSGI module
+# Add the following line at the end of the <VirtualHost *:80> block, right before the closing </VirtualHost>
+line: WSGIScriptAlias / /var/www/html/myapp.wsgi
+
+#Restart Apache
+$ sudo apache2ctl restart
+```
+
+
+### Clone the Catalog app from Github
+```
+$ sudo mkdir /var/www/catalog
+
+#Change owner for the catalog folder
+$ sudo chown -R grader:grader /var/www/catalog
+
+#Clone the catalog repository from Github
+$ cd /var/www/catalog
+$ git clone https://github.com/keshibat/Item_Catalog
+
+#Make a catalog.wsgi file: Directory:/var/www/html
+```
+```python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0, "/var/www/catalog/")
+
+from catalog import app as application
+```
+
+
+
+### Install virtual environment, Flask and the project's dependencies
+```
+$ sudo bash
+$ apt-get -qqy install make zip unzip postgresql
+$ apt-get -qqy install python3 python3-pip
+#Upgrade pip
+$ pip3 install
+$ pip3 install flask packaging oauth2client redis passlib flask-httpauth
+$ pip3 install sqlalchemy flask-sqlalchemy psycopg2-binary bleach requests
+$ apt-get -qqy install python python-pip
+#Upgrade pip
+$ pip2 install
+$ pip2 install flask packaging oauth2client redis passlib flask-httpauth
+$ pip2 install sqlalchemy flask-sqlalchemy psycopg2-binary bleach requests
+
+
+# Install virtualenv
+$ sudo apt install virtualenv
+# Move to the catalog folder
+$ cd /var/www/catalog
+# Create a new virtual environment
+$ sudo virtualenv venv
+# Activate the virtual environment
+$ source venv/bin/activate
+# Change permissions to the virtual environment folder
+$ sudo chmod -R 777 venv
+```
+
+
+
+### Configuring Apache
+```
+# Create a virtual host conifg file
+$ sudo nano /etc/apache2/sites-available/catalog.conf
+```
+```
+<VirtualHost *:80>
+    ServerName 54.252.247.6
+    ServerAdmin admin@54.252.247.6
+    WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+    <Directory /var/www/catalog/catalog>
+        Order deny,allow
+        Allow from all
+    </Directory>
+    Alias /static /var/www/catalog/catalog/static
+    <Directory /var/www/catalog/catalog/static/>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+
+
+
+
+
+## References
+  1. [Amazon Lightsail](https://lightsail.aws.amazon.com)
+  2. [mod_wsgi (Apache)](http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/)
+
+
+
+
 
 
 
