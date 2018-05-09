@@ -153,12 +153,12 @@ $ sudo dpkg-reconfigure tzdata
 ### Install apache2 and libapache2-mod-wsgi modules
 ```
 $ sudo apt-get install apache2
-$ sudo apt-get install libapache2-mod-wsgi
+$ sudo apt-get install libapache2-mod-wsgi python-dev
 ```
 
-### Install PostgreSQL
+### Install and configure PostgreSQL
 ```
-$ sudo apt-get install postgresql postgresql-contrib
+$ sudo apt-get install postgresql postgresql-contrib libpq-dev python-dev
 
 #Login as superuser postgres
 $ sudo su - postgres
@@ -173,6 +173,7 @@ $ alter role dbuser with password 'Secret1.0';
 #Give user "dbuser" permission to "catalog" application database
 $ grant all privileges on database catalog to dbuser;
 ```
+
 
 ### Install Git
 ```
@@ -205,17 +206,45 @@ $ sudo chown -R grader:grader /var/www/catalog
 
 #Clone the catalog repository from Github
 $ cd /var/www/catalog
-$ git clone https://github.com/keshibat/Item_Catalog
+$ git clone https://github.com/keshibat/Item_Catalog.git catalog
 
-#Make a catalog.wsgi file: Directory:/var/www/html
+#Make a catalog.wsgi file: Directory:/var/www/catalog
 ```
 ```python
+#!/usr/bin/python
 import sys
 import logging
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, "/var/www/catalog/")
+sys.path.insert(0,"/var/www/catalog/")
 
 from catalog import app as application
+```
+
+### Install virtual environment, Flask and the project's dependencies
+```
+# Install pip to use pip to install virtualenv and Flask
+$ sudo apt-get install python-pip
+
+# Install virtualenv
+$ sudo pip install virtualenv
+
+# Move to the catalog folder
+$ cd /var/www/catalog
+
+# Create a new virtual environment
+$ sudo virtualenv venv
+
+# Activate the virtual environment:
+$ source venv/bin/activate
+
+# Change permissions to the virtual environment folder
+$ sudo chmod -R 777 venv
+
+# Install Flask
+$ pip install Flask
+
+# Install all the other project's dependencies
+$ pip install bleach httplib2 request oauth2client sqlalchemy python-psycopg2
 ```
 
 
@@ -250,7 +279,7 @@ $ sudo chmod -R 777 venv
 
 
 
-### Configuring Apache
+### Configuring and enable a new virtual host
 ```
 # Create a virtual host conifg file
 $ sudo nano /etc/apache2/sites-available/catalog.conf
@@ -283,6 +312,7 @@ $ sudo nano /etc/apache2/sites-available/catalog.conf
 ## References
   1. [Amazon Lightsail](https://lightsail.aws.amazon.com)
   2. [mod_wsgi (Apache)](http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/)
+  3. [Deploy a Flask Application on an Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps#step-two-%E2%80%93-creating-a-flask-app)
 
 
 
