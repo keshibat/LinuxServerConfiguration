@@ -104,7 +104,7 @@ Restart Service
 sudo service ssh restart
 ```
 
-###Firewall
+##Firewall
 ```bash
 # set default rule to deny all incoming connections
 $ sudo ufw default deny incoming
@@ -152,8 +152,7 @@ $ sudo dpkg-reconfigure tzdata
 
 ### Install apache2 and libapache2-mod-wsgi modules
 ```
-$ sudo apt-get install apache2
-$ sudo apt-get install libapache2-mod-wsgi python-dev
+$ sudo apt-get install apache2 libapache2-mod-wsgi python-dev
 ```
 
 ### Install and configure PostgreSQL
@@ -185,8 +184,7 @@ $ git config --global user.email "kensukeshibata@gmail.com"
 ### Install mod_wsgi
 ```
 # install mod_wsgi
-$ sudo apt-get install libapache2-mod-wsgi
-$ sudo apt-get install libapache2-mod-wsgi-py3
+$ sudo apt-get install libapache2-mod-wsgi libapache2-mod-wsgi-py3
 
 #Configure Apache to handle requests using the WSGI module
 # Add the following line at the end of the <VirtualHost *:80> block, right before the closing </VirtualHost>
@@ -282,7 +280,7 @@ $ sudo chmod -R 777 venv
 ### Configuring and enable a new virtual host
 ```
 # Create a virtual host conifg file
-$ sudo nano /etc/apache2/sites-available/catalog.conf
+$ sudo nano /etc/apache2/sites-available/000-default.conf
 ```
 ```
 <VirtualHost *:80>
@@ -305,19 +303,7 @@ $ sudo nano /etc/apache2/sites-available/catalog.conf
 ```
 
 
-
-
-
-
 ## References
   1. [Amazon Lightsail](https://lightsail.aws.amazon.com)
   2. [mod_wsgi (Apache)](http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/)
   3. [Deploy a Flask Application on an Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps#step-two-%E2%80%93-creating-a-flask-app)
-
-
-
-
-
-
-
-
