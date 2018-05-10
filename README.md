@@ -24,7 +24,7 @@ $ sudo apt-get update
 
 $ sudo apt-get upgrade
 
-sudo apt-get autoremove
+$ sudo apt-get autoremove
 ```
 
 
@@ -101,7 +101,7 @@ PermitRootLogin no
 
 Restart Service
 ```bash
-sudo service ssh restart
+$ sudo service ssh restart
 ```
 
 ##Firewall
@@ -212,10 +212,12 @@ $ git clone https://github.com/keshibat/Item_Catalog.git catalog
 #!/usr/bin/python
 import sys
 import logging
+import os
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"/var/www/catalog/")
+sys.path.insert(0,"/var/www/catalog/catalog/")
+os.chdir("/var/www/catalog/catalog/")
 
-from catalog import app as application
+from finalproject import app as application
 ```
 
 ### Install virtual environment, Flask and the project's dependencies
@@ -292,7 +294,7 @@ $ sudo nano /etc/apache2/sites-available/000-default.conf
         Allow from all
     </Directory>
     Alias /static /var/www/catalog/catalog/static
-    <Directory /var/www/catalog/catalog/static/>
+    <Directory /var/www/catalog/static/>
         Order allow,deny
         Allow from all
     </Directory>
@@ -301,6 +303,13 @@ $ sudo nano /etc/apache2/sites-available/000-default.conf
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 ```
+
+
+### Restart Apache to launch the app
+```
+$ sudo service apache2 restart
+```
+
 
 
 ## References
