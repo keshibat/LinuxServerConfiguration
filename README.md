@@ -185,15 +185,25 @@ $ git config --global user.email "kensukeshibata@gmail.com"
 ```
 # install mod_wsgi
 $ sudo apt-get install libapache2-mod-wsgi libapache2-mod-wsgi-py3
+```
 
-#Configure Apache to handle requests using the WSGI module
-# Add the following line at the end of the <VirtualHost *:80> block, right before the closing </VirtualHost>
-line: WSGIScriptAlias / /var/www/html/myapp.wsgi
+###Configure Apache to handle requests using the WSGI module
+```
+# Create and edit the following file
+$ sudo vim /var/www/catalog/catalog.wsgi
+```
+```
+#!/usr/bin/python
+import sys
+import logging
+import os
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/catalog/catalog/")
+os.chdir("/var/www/catalog/catalog/")
 
 #Restart Apache
 $ sudo apache2ctl restart
 ```
-
 
 ### Clone the Catalog app from Github
 ```
@@ -247,8 +257,6 @@ $ pip install Flask
 $ pip install bleach httplib2 request oauth2client sqlalchemy python-psycopg2
 ```
 
-
-
 ### Install virtual environment, Flask and the project's dependencies
 ```
 $ sudo bash
@@ -277,8 +285,6 @@ $ source venv/bin/activate
 $ sudo chmod -R 777 venv
 ```
 
-
-
 ### Configuring and enable a new virtual host
 ```
 # Create a virtual host conifg file
@@ -304,12 +310,20 @@ $ sudo nano /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 ```
 
-
 ### Restart Apache to launch the app
 ```
 $ sudo service apache2 restart
 ```
 
+### [Set up Google OAuth](https://console.developers.google.com/apis)
+```
+#Add the follwoing URL in Authorized JavaScript origins
+http://54.252.247.6.xip.io
+
+#Add the folloing URL in Authorized redirect URIs
+http://54.252.247.6.xip.io/login
+http://54.252.247.6.xip.io/gconnect
+```
 
 
 ## References
