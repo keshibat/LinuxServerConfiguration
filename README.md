@@ -8,6 +8,8 @@ This is the final project of Udacity's [Full Stack Web Development Nanodegree](h
 
 ## IP address and ssh details
 
+Note, server is no longer online so these details are retained purely as an example.
+
 IP:     54.252.247.6
 
 SSH:    `ssh grader@54.252.247.6 -p 2200 -i ~/.ssh/LinuxCourse`
@@ -324,6 +326,8 @@ http://54.252.247.6.xip.io
 http://54.252.247.6.xip.io/login
 http://54.252.247.6.xip.io/gconnect
 ```
+
+###
 
 
 ## References
